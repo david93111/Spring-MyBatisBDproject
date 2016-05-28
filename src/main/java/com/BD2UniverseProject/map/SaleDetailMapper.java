@@ -4,6 +4,8 @@ import com.BD2UniverseProject.model.SaleDetail;
 import com.BD2UniverseProject.model.SaleDetailExample;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface SaleDetailMapper {
@@ -28,4 +30,6 @@ public interface SaleDetailMapper {
     int updateByPrimaryKeySelective(SaleDetail record);
 
     int updateByPrimaryKey(SaleDetail record);
+    
+    List<Map<String, Object>> selectDetailTableForSale(Map<String, Object> map);
 }

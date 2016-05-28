@@ -28,7 +28,7 @@
 		    <thead>
 		        <tr>
 		            <th>Sale detail id</th>
-		            <th>Product id</th>
+		            <th>Product</th>
 		            <th>Quantity</th>
 		            <th>Value</th>
 		            <th>Total detail value</th>
@@ -38,7 +38,7 @@
 				<c:forEach var="saleDetailItem" items="${salesDetail}">
 			        <tr>
 			            <td>${saleDetailItem.SALE_DETAIL_ID}</td>
-			            <td>${saleDetailItem.PRODUCT_ID}</td>
+			            <td>${saleDetailItem.PRODUCT_NAME} (${saleDetailItem.PRODUCT_CODE})</td>
 			            <td>${saleDetailItem.PRICE}</td>
 			            <td>${saleDetailItem.QUANTITY}</td>
 			            <td>${saleDetailItem.PRICE * saleDetailItem.QUANTITY}</td>

@@ -234,4 +234,12 @@
 		PRODUCT_ID = #{PRODUCT_ID,jdbcType=DECIMAL}
 		where SALE_DETAIL_ID = #{SALE_DETAIL_ID,jdbcType=DECIMAL}
 	</update>
+	
+	<select id="selectDetailTableForSale" parameterType="java.util.Map" resultType="java.util.Map">
+				select 
+  		sl.SALE_DETAIL_ID, pr.PRODUCT_NAME ,pr.PRODUCT_CODE , sl.PRICE, sl.QUANTITY
+	    from SALE_DETAIL sl
+	    inner join PRODUCT pr on sl.PRODUCT_ID = pr.PRODUCT_ID
+      WHERE  sl.SALE_ID = ${saleId}
+	</select>
 </mapper>

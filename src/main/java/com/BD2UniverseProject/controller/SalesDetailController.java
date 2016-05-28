@@ -1,7 +1,9 @@
 package com.BD2UniverseProject.controller;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +17,6 @@ import com.BD2UniverseProject.map.SaleDetailMapper;
 import com.BD2UniverseProject.map.SaleMapper;
 import com.BD2UniverseProject.model.Client;
 import com.BD2UniverseProject.model.Sale;
-import com.BD2UniverseProject.model.SaleDetail;
 import com.BD2UniverseProject.model.SaleDetailExample;
 
 @Controller
@@ -39,10 +40,10 @@ public class SalesDetailController {
 			Client clientModel = clientMapper.selectByPrimaryKey(saleModel.getCLIENT_ID());
 			SaleDetailExample saleDetailExample = new SaleDetailExample();
 			saleDetailExample.createCriteria().andSALE_DETAIL_IDEqualTo(orderId);
-			List<SaleDetail> salesList = salesDetailMapper.selectByExample(saleDetailExample);
-			model.addAttribute("salesDetail", salesList);
-			model.addAttribute("client", clientModel);
-			model.addAttribute("sale", saleModel);
+			Map<String, Object> mapParams = new HashMap<String, Object>();
+			mapParams.put("saleId", orderId.intValue());
+			List<Map<String,Object>> detailsSaleList = salesDetailMapper.selectDetailTableForSale(mapParams);
+			model.addAttribute("salesDetail", detailsSaleList);
 			return "SalesDetailView";
 			}
 		}
