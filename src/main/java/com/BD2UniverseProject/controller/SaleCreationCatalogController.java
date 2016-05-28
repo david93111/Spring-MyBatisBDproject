@@ -26,8 +26,6 @@ import com.BD2UniverseProject.model.Client;
 import com.BD2UniverseProject.model.ClientExample;
 import com.BD2UniverseProject.model.Product;
 import com.BD2UniverseProject.model.Sale;
-import com.BD2UniverseProject.model.SaleDetail;
-import com.BD2UniverseProject.model.SaleDetailExample;
 
 @Controller
 public class SaleCreationCatalogController {
@@ -48,9 +46,36 @@ public class SaleCreationCatalogController {
 	@RequestMapping("/saleCatalog")
 	public String salesManagment(Model model,HttpServletRequest request){
 		request.getParameter("from");
-//		request.getSession().setAttribute("orderId", "50");
-//		request.getSession().getAttribute("orderId");
-//		request.getSession().removeAttribute("orderId");
+		try{
+		if(request.getParameter("saleId")!=null&&!request.getParameter("saleId").equals("")){			
+			BigDecimal saleId = new BigDecimal(request.getParameter("saleId"));
+			List<Product> productList = ProductMapper.selectByExample(null);
+			if(productList!=null&&!productList.isEmpty()){
+				JSONArray prodsJSNarray = buildProductsJson(productList);
+				model.addAttribute("productsArray", prodsJSNarray.toString());
+			}else{
+				model.addAttribute("warning", "No products are registered or available at this moment, please verify the inventory or the products registers");	
+			}
+			Sale sale = salesMapper.selectByPrimaryKey(saleId);
+			model.addAttribute("totalPriceSale", sale.getTOTAL_PRICE());
+			model.addAttribute("saleId", saleId);
+			model.addAttribute("edit", true);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("saleId", saleId);
+			List<Map<String, Object>> listDetails =  salesDetailMapper.selectDetailTableForSale(map);
+			
+			if(listDetails!=null&&!listDetails.isEmpty()){
+				JSONArray detailsJson = buildDetailsJson(listDetails);
+				model.addAttribute("detailsArray", detailsJson.toString());			
+			}
+		}else{
+			model.addAttribute("edit", false);
+		}
+		}catch(Exception e){
+			model.addAttribute("error", "cause: "+e.getCause() +",detail message:"+e.getMessage()+". Report this to the administrator");
+			model.addAttribute("edit", false);
+		}
 		model.addAttribute("context", request.getContextPath());
 		return "SaleCatalogView";
 	}

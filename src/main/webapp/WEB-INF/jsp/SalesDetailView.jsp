@@ -22,30 +22,37 @@
 	<div class="row">
 		<a class="btn btn-default" href="salesManagment.html">Go Back</a>
 	</div>
-	<div class="row">
-		<br>
-		<table id="order_details_table" class="display">
-		    <thead>
-		        <tr>
-		            <th>Sale detail id</th>
-		            <th>Product</th>
-		            <th>Quantity</th>
-		            <th>Value</th>
-		            <th>Total detail value</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-				<c:forEach var="saleDetailItem" items="${salesDetail}">
-			        <tr>
-			            <td>${saleDetailItem.SALE_DETAIL_ID}</td>
-			            <td>${saleDetailItem.PRODUCT_NAME} (${saleDetailItem.PRODUCT_CODE})</td>
-			            <td>${saleDetailItem.PRICE}</td>
-			            <td>${saleDetailItem.QUANTITY}</td>
-			            <td>${saleDetailItem.PRICE * saleDetailItem.QUANTITY}</td>
-			        </tr>
-			    </c:forEach>
-		    </tbody>
-		</table>
+	<br>
+	<div class="row">		
+	  <div class="panel panel-default">
+		 	<div class="panel-body">
+				<table id="order_details_table" class="display">
+				    <thead>
+				        <tr>
+				            <th>Sale detail id</th>
+				            <th>Product</th>
+				            <th>Quantity</th>
+				            <th>Value</th>
+				            <th>Total detail value</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+						<c:forEach var="saleDetailItem" items="${salesDetail}">
+					        <tr>
+					            <td>${saleDetailItem.SALE_DETAIL_ID}</td>
+					            <td>${saleDetailItem.PRODUCT_NAME} (${saleDetailItem.PRODUCT_CODE})</td>
+					            <td>${saleDetailItem.PRICE}</td>
+					            <td>${saleDetailItem.QUANTITY}</td>
+					            <td>${saleDetailItem.PRICE * saleDetailItem.QUANTITY}</td>
+					        </tr>
+					    </c:forEach>
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<a class="btn btn-primary" href="saleCatalog.html?from=orderDetail&saleId=${sale.SALE_ID}">Edit</a>
 	</div>
 </div>
 <script>

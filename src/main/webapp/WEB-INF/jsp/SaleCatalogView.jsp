@@ -21,8 +21,13 @@
 		<h1>Sales wizard</h1>
 	</div>
 	<div class="row" id="actions-panel">
-		<a class="btn btn-default" href="salesManagment.html?from=salesCatalog">Go Back</a>
-		<input type="hidden" id="orderId" name="orderId" val="${orderId}">
+		<c:if test="${edit}">
+			<a class="btn btn-default" href="salesDetail.html?orderId=${saleId}">Back to order</a>
+		</c:if>
+		<c:if test="${!edit}">
+			<a class="btn btn-default" href="salesManagment.html?from=salesCatalog">Go Back</a>
+		</c:if>
+		<input type="hidden" id="orderId" name="orderId" value="${saleId}">
 	</div>
 	<br>
 	<div class="row" id="catalog-container">
@@ -53,7 +58,34 @@
 </div>
 <script>
 var context="${context}";
+var edit = ${edit};
+if(edit){
+	var warning ="${warning}";
+	var errors = "${error}";
+	if(errors!=""||warning!=""){
+		if(errors!=""){
+			createErrorMessage(errors);
+		}if(warning!=""){
+			createWarningMessage(warning);
+		}
+	}else{
+		var detailsArry = '${detailsArray}';
+		var jsonDetails,jsonProducts;
+		if(detailsArry!=""){
+			jsonDetails = JSON.parse(detailsArry);
+		}
+		var productsArray = '${productsArray}';
+		if(productsArray!=""){
+			jsonProducts = JSON.parse(productsArray);
+		}
+		var totalSales = "${totalPriceSale}";
+		if(jsonDetails!=undefined&&jsonProducts!=undefined){
+			renderProductsInCatalog(jsonProducts,jsonDetails,totalSales);
+		}
+	}
+}else{
 initAutoComplete();
+}
 
 function initAutoComplete(){	
 	jQuery("#customer-selection-field").autocomplete({
@@ -225,7 +257,7 @@ function renderProductsInCatalog(productsArray,detailsArray,totalPriceSale){
 		if(detailsArray!=undefined){
 
 				for(i=0;i<detailsArray.length;i++){
-					htmlDetails+='	<li id=price_details_'+detailsArray.detailId[i]+'><em>'+detailsArray.name[i]+'</em> / Quantity'+detailsArray[i].quantity+' <button type="button" onclick="removeDetailFromSale('+detailsArray.detailId[i]+')" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>';
+					htmlDetails+='	<li id=price_details_'+detailsArray[i].detailId+'><em>Product:'+detailsArray[i].name+'</em> /Quantity '+detailsArray[i].quantity+'/ $'+(detailsArray[i].price*detailsArray[i].quantity)+'<button type="button" onclick="removeDetailFromSale('+detailsArray[i].detailId+')" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>';
 					quantities+=detailsArray[i].quantity;
 				}			
 		}
@@ -245,8 +277,9 @@ function renderProductsInCatalog(productsArray,detailsArray,totalPriceSale){
 		
 		jQuery("#products-grid").css('display','block');
 		jQuery("#price-list-details").css('display','block');
-		
-		jQuery("#actions-panel").append('<a class="btn btn-default" id="change-client-action" onclick="renderAutoCompleteReload()">Change client</a>');
+		if(!edit){
+			jQuery("#actions-panel").append('<a class="btn btn-default" id="change-client-action" onclick="renderAutoCompleteReload()">Change client</a>');
+		}
 }
 
 function AddProductToSale(productCode,productId){
