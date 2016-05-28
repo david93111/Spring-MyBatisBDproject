@@ -242,4 +242,12 @@
 	    inner join PRODUCT pr on sl.PRODUCT_ID = pr.PRODUCT_ID
       WHERE  sl.SALE_ID = ${saleId}
 	</select>
+	
+		<select id="SP_ADD_DETAIL" statementType = "CALLABLE" parameterType="java.util.Map">
+	{CALL ADD_DETAIL(
+			        #{v_sale_id, mode=IN, jdbcType=NUMERIC, javaType=java.math.BigDecimal},
+					#{v_product_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+					#{v_detail_quantity, mode=IN, jdbcType=NUMERIC, javaType=java.math.BigDecimal}
+	)}
+	</select>
 </mapper>

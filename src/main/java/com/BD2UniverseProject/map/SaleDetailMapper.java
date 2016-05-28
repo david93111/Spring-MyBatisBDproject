@@ -32,4 +32,6 @@ public interface SaleDetailMapper {
     int updateByPrimaryKey(SaleDetail record);
     
     List<Map<String, Object>> selectDetailTableForSale(Map<String, Object> map);
+    
+    void SP_ADD_DETAIL(Map<String, Object> map);
 }

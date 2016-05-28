@@ -194,7 +194,13 @@ function renderProductsInCatalog(productsArray,detailsArray,totalPriceSale){
 		htmlProducts+='	 <div class="price">';
 		htmlProducts+=productsArray[i].price;
 		htmlProducts+='		</div>';
-		htmlProducts+='<a class="cd-select" onclick="AddProductToSale('+productsArray[i].prodId+')">add it</a>';
+		htmlProducts+=' <div style="text-align:center;">';
+		htmlProducts+='		<img class="img-responsive" src="http://previews.123rf.com/images/cowpland/cowpland1301/cowpland130100031/17307468-SSD-solid-state-drive-vector-eps-8-Stock-Vector-ssd.jpg"></img>';
+		htmlProducts+='		<input style="margin-bottom: 10px;margin-top: 10px; text-align: center;" type="text" id="quantity_'+productsArray[i].prodId+'" placeholder="quantity"><br>';
+		htmlProducts+='		<a class="cd-select" onclick="AddProductToSale(';
+		htmlProducts+="'"+productsArray[i].code+"'";
+		htmlProducts+=		','+productsArray[i].prodId+')">add it</a>';
+		htmlProducts+='	</div>';
 		htmlProducts+='</div>';
 	}
 		
@@ -243,12 +249,14 @@ function renderProductsInCatalog(productsArray,detailsArray,totalPriceSale){
 		jQuery("#actions-panel").append('<a class="btn btn-default" id="change-client-action" onclick="renderAutoCompleteReload()">Change client</a>');
 }
 
-function AddProductToSale(productId){
+function AddProductToSale(productCode,productId){
+	var orderIdS = jQuery("#orderId").val()!=undefined&&jQuery("#orderId").val()!="null"?jQuery("#orderId").val():null;
+	var quantity = jQuery("#quantity_"+productId).val()!=undefined?jQuery("#quantity_"+productId).val():null;
 	jQuery.ajax({
         dataType: "json",
         type : 'Get',
-        url: context+"/saleCatalog/processClientAndSale.html",
-        data:{orderId: orderId,productId: productId},
+        url: context+"/saleCatalog/processDetailForOrder.html",
+        data:{orderId: orderIdS,productCode: productCode,quantity: quantity},
         success: function(data) {
         	if(data.error!=undefined||data.warning!=undefined){
     			if(data.error!=undefined){
@@ -259,7 +267,7 @@ function AddProductToSale(productId){
     			}        		
         	}else{
         		createSuccessMessage(data.sucess);
-        		renderProductsInCatalog(data.productsArray);
+        		renderPricesDetailTable(data.detailsArray,data.totalPriceSale);
         	}
         },
         error: function(data) {
@@ -268,17 +276,56 @@ function AddProductToSale(productId){
     });
 }
 
+function renderPricesDetailTable(detailsArray,totalPriceSale){
+	
+	var htmlDetails='';
+	var quantities = 0;
+	htmlDetails+='<li class="cd-popular is-ended">';
+	htmlDetails+='		<header class="cd-pricing-header">';
+	htmlDetails+='			<h2>Sale total</h2>	';
+	htmlDetails+='			<div class="cd-price">';
+	htmlDetails+='				<span class="cd-currency">$</span>';
+	if(totalPriceSale!=undefined){
+		htmlDetails+='				<span class="cd-value">'+totalPriceSale+'</span>';
+	}else{
+		htmlDetails+='				<span class="cd-value">0</span>';
+	}			
+	
+	htmlDetails+='			</div>';
+	htmlDetails+='		</header>';	
+	htmlDetails+='		<div class="cd-pricing-body">';
+	htmlDetails+='			<ul class="cd-pricing-features">';
+	
+	if(detailsArray!=undefined){
+
+			for(i=0;i<detailsArray.length;i++){
+				htmlDetails+='	<li id=price_details_'+detailsArray.detailId[i]+'><em>'+detailsArray.name[i]+'</em> / #'+detailsArray[i].quantity+'/ $'+(detailsArray[i].price*detailsArray[i].quantity)+'<button type="button" onclick="removeDetailFromSale('+detailsArray.detailId[i]+')" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>';
+				quantities+=detailsArray[i].quantity;
+			}			
+	}
+	
+	htmlDetails+='			</ul>';
+	htmlDetails+='		</div>		';
+	htmlDetails+='		<footer class="cd-pricing-footer">';
+	htmlDetails+='			<div class="cd-price">';			
+	htmlDetails+='				<span class="cd-value">Total units</span><br><span class="cd-value">'+quantities+'</span>';
+	htmlDetails+='			</div>';
+	htmlDetails+='		</footer> ';
+	htmlDetails+='	</li>';
+	
+	jQuery("#price-list-details").html(htmlDetails);
+	jQuery("#price-list-details").css('display','block');
+}
+
 function removeDetailFromSale(detailId){
 	
 }
 </script>
+
 </body>
+
 <style>
-/* -------------------------------- 
 
-Primary style
-
--------------------------------- */
 *, *::after, *::before {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -711,7 +758,7 @@ Main Components
 
 .event {
   width: 45%;
-  height: 350px;
+  height: 600px;
   background: #fff;
   border: 1px solid #CCC;
   border-radius: 2px;
@@ -781,7 +828,7 @@ Main Components
   width: 60px;
   position: relative;
   top: -85px;
-  left: 115px; 
+  left: 50px; 
   
   /* Text */
   color: #E35354;
