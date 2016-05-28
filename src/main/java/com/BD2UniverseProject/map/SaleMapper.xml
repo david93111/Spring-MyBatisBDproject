@@ -234,4 +234,12 @@
 		CLIENT_ID = #{CLIENT_ID,jdbcType=DECIMAL}
 		where SALE_ID = #{SALE_ID,jdbcType=DECIMAL}
 	</update>
+	<select id="selectSalesTable" resultType="java.util.Map">
+	select 
+  		sl.SALE_ID,TO_CHAR(sl.SALE_DATE, 'DD-MON-YYYY HH24:MI') as SALE_DATE,sl.TOTAL_PRICE ,st.STATUS_NAME,cl.FIRST_NAME,cl.SECOND_NAME,cl.FIRST_LASTNAME,cl.SECOND_LASTNAME
+	from sale sl
+	inner join SALE_STATUS st on sl.SALE_STATUS = st.SALE_STATUS_ID
+	inner join client cl on sl.CLIENT_ID = cl.CLIENT_ID
+	
+	</select>
 </mapper>

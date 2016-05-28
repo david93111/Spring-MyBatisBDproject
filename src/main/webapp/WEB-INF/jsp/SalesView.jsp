@@ -28,16 +28,20 @@
 				    <thead>
 				        <tr>
 				            <th>Order number</th>
+				            <th>Client</th>
 				            <th>Total value</th>
 				            <th>Sale status</th>
+				            <th>Date</th>
 				        </tr>
 				    </thead>
 				    <tbody>
 						<c:forEach var="saleItem" items="${sales}">
 					        <tr>
 					            <td><a href="salesDetail.html?&orderId=${saleItem.SALE_ID}">${saleItem.SALE_ID}</a></td>
+					            <td>${saleItem.FIRST_NAME}<c:if test="${saleItem.SECOND_NAME != null}"> ${saleItem.SECOND_NAME}</c:if> ${saleItem.FIRST_LASTNAME}<c:if test="${saleItem.SECOND_LASTNAME != null}"> ${saleItem.SECOND_LASTNAME}</c:if></td>
 					            <td>${saleItem.TOTAL_PRICE}</td>
-					            <td>${saleItem.SALE_STATUS}</td>
+					            <td>${saleItem.STATUS_NAME}</td>
+					            <td>${saleItem.SALE_DATE}</td>
 					        </tr>
 					    </c:forEach>
 				    </tbody>
