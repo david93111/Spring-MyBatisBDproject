@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.BD2UniverseProject.map.ClientMapper">
+	<resultMap id="BaseResultMap" type="com.BD2UniverseProject.model.Client">
+		<id column="CLIENT_ID" property="CLIENT_ID" jdbcType="DECIMAL" />
+		<result column="FIRST_NAME" property="FIRST_NAME" jdbcType="VARCHAR" />
+		<result column="SECOND_NAME" property="SECOND_NAME" jdbcType="VARCHAR" />
+		<result column="FIRST_LASTNAME" property="FIRST_LASTNAME"
+			jdbcType="VARCHAR" />
+		<result column="SECOND_LASTNAME" property="SECOND_LASTNAME"
+			jdbcType="VARCHAR" />
+		<result column="ADDRESS" property="ADDRESS" jdbcType="VARCHAR" />
+		<result column="PHONE" property="PHONE" jdbcType="VARCHAR" />
+		<result column="CELLPHONE" property="CELLPHONE" jdbcType="VARCHAR" />
+		<result column="CLIENT_TYPE" property="CLIENT_TYPE" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		CLIENT_ID, FIRST_NAME, SECOND_NAME, FIRST_LASTNAME, SECOND_LASTNAME, ADDRESS,
+		PHONE,
+		CELLPHONE, CLIENT_TYPE
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.BD2UniverseProject.model.ClientExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from CLIENT
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.math.BigDecimal">
+		select
+		<include refid="Base_Column_List" />
+		from CLIENT
+		where CLIENT_ID = #{CLIENT_ID,jdbcType=DECIMAL}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+		delete from CLIENT
+		where CLIENT_ID = #{CLIENT_ID,jdbcType=DECIMAL}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.BD2UniverseProject.model.ClientExample">
+		delete from CLIENT
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.BD2UniverseProject.model.Client">
+		insert into CLIENT (CLIENT_ID, FIRST_NAME, SECOND_NAME,
+		FIRST_LASTNAME, SECOND_LASTNAME, ADDRESS,
+		PHONE, CELLPHONE, CLIENT_TYPE
+		)
+		values (#{CLIENT_ID,jdbcType=DECIMAL}, #{FIRST_NAME,jdbcType=VARCHAR},
+		#{SECOND_NAME,jdbcType=VARCHAR},
+		#{FIRST_LASTNAME,jdbcType=VARCHAR}, #{SECOND_LASTNAME,jdbcType=VARCHAR}, #{ADDRESS,jdbcType=VARCHAR},
+		#{PHONE,jdbcType=VARCHAR}, #{CELLPHONE,jdbcType=VARCHAR},
+		#{CLIENT_TYPE,jdbcType=DECIMAL}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.BD2UniverseProject.model.Client">
+		insert into CLIENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="CLIENT_ID != null">
+				CLIENT_ID,
+			</if>
+			<if test="FIRST_NAME != null">
+				FIRST_NAME,
+			</if>
+			<if test="SECOND_NAME != null">
+				SECOND_NAME,
+			</if>
+			<if test="FIRST_LASTNAME != null">
+				FIRST_LASTNAME,
+			</if>
+			<if test="SECOND_LASTNAME != null">
+				SECOND_LASTNAME,
+			</if>
+			<if test="ADDRESS != null">
+				ADDRESS,
+			</if>
+			<if test="PHONE != null">
+				PHONE,
+			</if>
+			<if test="CELLPHONE != null">
+				CELLPHONE,
+			</if>
+			<if test="CLIENT_TYPE != null">
+				CLIENT_TYPE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="CLIENT_ID != null">
+				#{CLIENT_ID,jdbcType=DECIMAL},
+			</if>
+			<if test="FIRST_NAME != null">
+				#{FIRST_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="SECOND_NAME != null">
+				#{SECOND_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="FIRST_LASTNAME != null">
+				#{FIRST_LASTNAME,jdbcType=VARCHAR},
+			</if>
+			<if test="SECOND_LASTNAME != null">
+				#{SECOND_LASTNAME,jdbcType=VARCHAR},
+			</if>
+			<if test="ADDRESS != null">
+				#{ADDRESS,jdbcType=VARCHAR},
+			</if>
+			<if test="PHONE != null">
+				#{PHONE,jdbcType=VARCHAR},
+			</if>
+			<if test="CELLPHONE != null">
+				#{CELLPHONE,jdbcType=VARCHAR},
+			</if>
+			<if test="CLIENT_TYPE != null">
+				#{CLIENT_TYPE,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.BD2UniverseProject.model.ClientExample"
+		resultType="java.lang.Integer">
+		select count(*) from CLIENT
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update CLIENT
+		<set>
+			<if test="record.CLIENT_ID != null">
+				CLIENT_ID = #{record.CLIENT_ID,jdbcType=DECIMAL},
+			</if>
+			<if test="record.FIRST_NAME != null">
+				FIRST_NAME = #{record.FIRST_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="record.SECOND_NAME != null">
+				SECOND_NAME = #{record.SECOND_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="record.FIRST_LASTNAME != null">
+				FIRST_LASTNAME = #{record.FIRST_LASTNAME,jdbcType=VARCHAR},
+			</if>
+			<if test="record.SECOND_LASTNAME != null">
+				SECOND_LASTNAME = #{record.SECOND_LASTNAME,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ADDRESS != null">
+				ADDRESS = #{record.ADDRESS,jdbcType=VARCHAR},
+			</if>
+			<if test="record.PHONE != null">
+				PHONE = #{record.PHONE,jdbcType=VARCHAR},
+			</if>
+			<if test="record.CELLPHONE != null">
+				CELLPHONE = #{record.CELLPHONE,jdbcType=VARCHAR},
+			</if>
+			<if test="record.CLIENT_TYPE != null">
+				CLIENT_TYPE = #{record.CLIENT_TYPE,jdbcType=DECIMAL},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update CLIENT
+		set CLIENT_ID = #{record.CLIENT_ID,jdbcType=DECIMAL},
+		FIRST_NAME = #{record.FIRST_NAME,jdbcType=VARCHAR},
+		SECOND_NAME = #{record.SECOND_NAME,jdbcType=VARCHAR},
+		FIRST_LASTNAME = #{record.FIRST_LASTNAME,jdbcType=VARCHAR},
+		SECOND_LASTNAME = #{record.SECOND_LASTNAME,jdbcType=VARCHAR},
+		ADDRESS = #{record.ADDRESS,jdbcType=VARCHAR},
+		PHONE = #{record.PHONE,jdbcType=VARCHAR},
+		CELLPHONE = #{record.CELLPHONE,jdbcType=VARCHAR},
+		CLIENT_TYPE = #{record.CLIENT_TYPE,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.BD2UniverseProject.model.Client">
+		update CLIENT
+		<set>
+			<if test="FIRST_NAME != null">
+				FIRST_NAME = #{FIRST_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="SECOND_NAME != null">
+				SECOND_NAME = #{SECOND_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="FIRST_LASTNAME != null">
+				FIRST_LASTNAME = #{FIRST_LASTNAME,jdbcType=VARCHAR},
+			</if>
+			<if test="SECOND_LASTNAME != null">
+				SECOND_LASTNAME = #{SECOND_LASTNAME,jdbcType=VARCHAR},
+			</if>
+			<if test="ADDRESS != null">
+				ADDRESS = #{ADDRESS,jdbcType=VARCHAR},
+			</if>
+			<if test="PHONE != null">
+				PHONE = #{PHONE,jdbcType=VARCHAR},
+			</if>
+			<if test="CELLPHONE != null">
+				CELLPHONE = #{CELLPHONE,jdbcType=VARCHAR},
+			</if>
+			<if test="CLIENT_TYPE != null">
+				CLIENT_TYPE = #{CLIENT_TYPE,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where CLIENT_ID = #{CLIENT_ID,jdbcType=DECIMAL}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.BD2UniverseProject.model.Client">
+		update CLIENT
+		set FIRST_NAME = #{FIRST_NAME,jdbcType=VARCHAR},
+		SECOND_NAME = #{SECOND_NAME,jdbcType=VARCHAR},
+		FIRST_LASTNAME = #{FIRST_LASTNAME,jdbcType=VARCHAR},
+		SECOND_LASTNAME = #{SECOND_LASTNAME,jdbcType=VARCHAR},
+		ADDRESS = #{ADDRESS,jdbcType=VARCHAR},
+		PHONE = #{PHONE,jdbcType=VARCHAR},
+		CELLPHONE = #{CELLPHONE,jdbcType=VARCHAR},
+		CLIENT_TYPE = #{CLIENT_TYPE,jdbcType=DECIMAL}
+		where CLIENT_ID = #{CLIENT_ID,jdbcType=DECIMAL}
+	</update>
+</mapper>

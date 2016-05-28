@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.BD2UniverseProject.map.SaleStatusMapper">
+	<resultMap id="BaseResultMap" type="com.BD2UniverseProject.model.SaleStatus">
+		<id column="SALE_STATUS_ID" property="SALE_STATUS_ID" jdbcType="DECIMAL" />
+		<result column="STATUS_NAME" property="STATUS_NAME" jdbcType="VARCHAR" />
+		<result column="STATUS_CODE" property="STATUS_CODE" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		SALE_STATUS_ID, STATUS_NAME, STATUS_CODE
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.BD2UniverseProject.model.SaleStatusExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from SALE_STATUS
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.math.BigDecimal">
+		select
+		<include refid="Base_Column_List" />
+		from SALE_STATUS
+		where SALE_STATUS_ID = #{SALE_STATUS_ID,jdbcType=DECIMAL}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+		delete from SALE_STATUS
+		where SALE_STATUS_ID = #{SALE_STATUS_ID,jdbcType=DECIMAL}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.BD2UniverseProject.model.SaleStatusExample">
+		delete from SALE_STATUS
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.BD2UniverseProject.model.SaleStatus">
+		insert into SALE_STATUS (SALE_STATUS_ID, STATUS_NAME, STATUS_CODE
+		)
+		values (#{SALE_STATUS_ID,jdbcType=DECIMAL}, #{STATUS_NAME,jdbcType=VARCHAR},
+		#{STATUS_CODE,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.BD2UniverseProject.model.SaleStatus">
+		insert into SALE_STATUS
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="SALE_STATUS_ID != null">
+				SALE_STATUS_ID,
+			</if>
+			<if test="STATUS_NAME != null">
+				STATUS_NAME,
+			</if>
+			<if test="STATUS_CODE != null">
+				STATUS_CODE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="SALE_STATUS_ID != null">
+				#{SALE_STATUS_ID,jdbcType=DECIMAL},
+			</if>
+			<if test="STATUS_NAME != null">
+				#{STATUS_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="STATUS_CODE != null">
+				#{STATUS_CODE,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.BD2UniverseProject.model.SaleStatusExample"
+		resultType="java.lang.Integer">
+		select count(*) from SALE_STATUS
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update SALE_STATUS
+		<set>
+			<if test="record.SALE_STATUS_ID != null">
+				SALE_STATUS_ID = #{record.SALE_STATUS_ID,jdbcType=DECIMAL},
+			</if>
+			<if test="record.STATUS_NAME != null">
+				STATUS_NAME = #{record.STATUS_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="record.STATUS_CODE != null">
+				STATUS_CODE = #{record.STATUS_CODE,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update SALE_STATUS
+		set SALE_STATUS_ID = #{record.SALE_STATUS_ID,jdbcType=DECIMAL},
+		STATUS_NAME = #{record.STATUS_NAME,jdbcType=VARCHAR},
+		STATUS_CODE = #{record.STATUS_CODE,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.BD2UniverseProject.model.SaleStatus">
+		update SALE_STATUS
+		<set>
+			<if test="STATUS_NAME != null">
+				STATUS_NAME = #{STATUS_NAME,jdbcType=VARCHAR},
+			</if>
+			<if test="STATUS_CODE != null">
+				STATUS_CODE = #{STATUS_CODE,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where SALE_STATUS_ID = #{SALE_STATUS_ID,jdbcType=DECIMAL}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.BD2UniverseProject.model.SaleStatus">
+		update SALE_STATUS
+		set STATUS_NAME = #{STATUS_NAME,jdbcType=VARCHAR},
+		STATUS_CODE = #{STATUS_CODE,jdbcType=VARCHAR}
+		where SALE_STATUS_ID = #{SALE_STATUS_ID,jdbcType=DECIMAL}
+	</update>
+</mapper>

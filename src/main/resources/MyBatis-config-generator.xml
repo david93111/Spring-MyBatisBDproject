@@ -1,0 +1,47 @@
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- Ubicación del JAR JDBC del gestor de Base de datos a usar, en este 
+		caso MySQL -->
+	<classPathEntry location="C:/Users/David/Downloads/ojdbc14.jar" />
+
+	<!-- Generaremos para MyBatis versión 3 -->
+	<context id="DB1" targetRuntime="MyBatis3">
+
+		<!-- No generamos los comentarios -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<!-- Parámetros de conexión a la bd -->
+		<jdbcConnection driverClass="oracle.jdbc.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@//localhost:1521/XE" userId="david"
+			password="hppc9311">
+		</jdbcConnection>
+
+		<!-- Modelo java y Modelo Example -->
+		<javaModelGenerator targetPackage="com.BD2UniverseProject.model"
+			targetProject="BD2UniverseProject">
+			<property name="enableSubPackages" value="true" />
+		</javaModelGenerator>
+		<!-- Mapper xml con consultas -->
+		<sqlMapGenerator targetPackage="com.BD2UniverseProject.map"
+			targetProject="BD2UniverseProject">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- Interfaz para el mapper XML -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.BD2UniverseProject.map" targetProject="BD2UniverseProject">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<!-- Generamos el código fuente de todas las tablas evitando la generación 
+			varios métodos -->
+		<table tableName="PRODUCT" modelType="flat">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+
+	</context>
+</generatorConfiguration>
