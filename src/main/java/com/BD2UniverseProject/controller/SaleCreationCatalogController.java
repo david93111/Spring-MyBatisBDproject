@@ -120,7 +120,17 @@ public class SaleCreationCatalogController {
 					BigDecimal saleId = new BigDecimal(paramsMap.get("v_sale_id").toString());
 					if(saleId!=null){
 						JSNreturn.put("sucess", "Sale created sucessfully, know you can add products to it!");
+						JSNreturn.put("saleId", saleId);
+						JSNreturn.put("clientNames", clientSelected.getFIRST_NAME()+" "+clientSelected.getFIRST_LASTNAME());
+						JSNreturn.put("Address", clientSelected.getADDRESS());
+						
 						List<Product> productList = ProductMapper.selectByExample(null);
+						if(productList!=null&&!productList.isEmpty()){
+							JSONArray prodsJSNarray = buildProductsJson(productList);
+							JSNreturn.put("productsArray", prodsJSNarray);
+						}else{
+							JSNreturn.put("warning", "No products are registered or available at this moment, please verify the inventory or the products registers");	
+						}
 						
 					}			
 				}else{
@@ -141,6 +151,31 @@ public class SaleCreationCatalogController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public JSONArray buildProductsJson(List<Product> productList){
+		JSONArray JSNarrayProd = new JSONArray();
+		for(Product product:productList){
+			JSONObject prodObject = new JSONObject();
+			prodObject.put("prodId", product.getPRODUCT_ID());
+			prodObject.put("name", product.getPRODUCT_NAME());
+			prodObject.put("code", product.getPRODUCT_CODE());
+			prodObject.put("price", product.getPRODUCT_PRICE());
+			prodObject.put("inventory", product.getINVENTORY());
+			JSNarrayProd.put(prodObject);
+		}
+		return JSNarrayProd;
+	}
+	
+	@RequestMapping("/saleCatalog/getDetailsSale")
+	public void getDetailsForSale(HttpServletRequest request,HttpServletResponse response){
+		request.getParameter("orderId");
+	}
+	
+	@RequestMapping("/saleCatalog/processDetailForOrder")
+	@Transactional
+	public void AddOrUpdateDetailForSale(HttpServletRequest request,HttpServletResponse response){
+		
 	}
 	
 }

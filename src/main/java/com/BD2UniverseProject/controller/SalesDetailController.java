@@ -44,6 +44,8 @@ public class SalesDetailController {
 			mapParams.put("saleId", orderId.intValue());
 			List<Map<String,Object>> detailsSaleList = salesDetailMapper.selectDetailTableForSale(mapParams);
 			model.addAttribute("salesDetail", detailsSaleList);
+			model.addAttribute("client", clientModel);
+			model.addAttribute("sale", saleModel);
 			return "SalesDetailView";
 			}
 		}
