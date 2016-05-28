@@ -79,7 +79,7 @@ if(edit){
 			jsonProducts = JSON.parse(productsArray);
 		}
 		var totalSales = "${totalPriceSale}";
-		if(jsonDetails!=undefined&&jsonProducts!=undefined){
+		if(jsonProducts!=undefined){
 			renderProductsInCatalog(jsonProducts,jsonDetails,totalSales);
 		}
 	}

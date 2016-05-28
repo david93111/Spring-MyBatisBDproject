@@ -31,8 +31,8 @@
 				        <tr>
 				            <th>Sale detail id</th>
 				            <th>Product</th>
-				            <th>Quantity</th>
 				            <th>Value</th>
+				            <th>Quantity</th>
 				            <th>Total detail value</th>
 				        </tr>
 				    </thead>

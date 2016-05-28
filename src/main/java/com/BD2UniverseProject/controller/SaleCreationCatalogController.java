@@ -223,6 +223,7 @@ public class SaleCreationCatalogController {
 				JSNreturn.put("sucess", "Product sucesfully added to the sale!");
 
 				map.put("saleId", orderID);
+				salesMapper.SP_call_update_sale_value(map);
 				List<Map<String, Object>> listDetails =  salesDetailMapper.selectDetailTableForSale(map);
 				
 				if(listDetails!=null&&!listDetails.isEmpty()){
@@ -291,6 +292,10 @@ public class SaleCreationCatalogController {
 				JSNreturn.put("sucess", "Product sucesfully removed from the sale!");
 				
 				Map<String, Object> map = new HashMap<String, Object>();
+				
+				map.put("v_sale_id", orderID);
+				salesMapper.SP_call_update_sale_value(map);
+				
 				map.put("saleId", orderID);
 				List<Map<String, Object>> listDetails =  salesDetailMapper.selectDetailTableForSale(map);
 				

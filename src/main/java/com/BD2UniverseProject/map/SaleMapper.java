@@ -36,4 +36,6 @@ public interface SaleMapper {
     
     void SP_CREATE_SALE(Map<String, Object> map);
     
+    void SP_call_update_sale_value(Map<String, Object> map);
+    
 }

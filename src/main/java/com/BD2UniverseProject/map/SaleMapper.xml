@@ -249,4 +249,9 @@
 					#{v_sale_id, mode=OUT, jdbcType=NUMERIC, javaType=java.math.BigDecimal}
 	)}
 	</select>
+	<select id="SP_call_update_sale_value" statementType = "CALLABLE" parameterType="java.util.Map">
+	{CALL call_update_sale_value(
+			        #{v_sale_id, mode=IN, jdbcType=NUMERIC, javaType=java.math.BigDecimal}
+	)}
+	</select>
 </mapper>
