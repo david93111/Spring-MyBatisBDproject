@@ -33,4 +33,7 @@ public interface SaleMapper {
     int updateByPrimaryKey(Sale record);
     
     List<Map<String, Object>> selectSalesTable();
+    
+    void SP_CREATE_SALE(Map<String, Object> map);
+    
 }

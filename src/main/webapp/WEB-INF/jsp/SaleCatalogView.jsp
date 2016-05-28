@@ -14,6 +14,9 @@
 </head>
 <body>
 <div class="block-flat container">
+	<div class="row" id="alert-messages">
+		
+	</div>
 	<div class="row">
 		<h1>Sales wizard</h1>
 	</div>
@@ -38,8 +41,7 @@
 var context="${context}";
 init();
 
-function init(){
-	
+function init(){	
 	jQuery("#customer-selection-field").autocomplete({
 	    source: function( request, response ) {
 	    	var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
@@ -49,10 +51,20 @@ function init(){
 	            url: context+"/saleCatalog/getClientsList.html",
 	            data:{term: request.term},
 	            success: function(data) {
-	            	jQuery('#customer-selection-field').removeClass('ui-autocomplete-loading'); 
+	            	// hide loading image
+	            	jQuery('#customer-selection-field').removeClass('ui-autocomplete-loading');
 	            	if(data!=undefined&&data!=null&&data.arrayResults!=undefined){
-	                // hide loading image
-	            		response(data.arrayResults);
+	            		if(data.error!=undefined||data.warning!=undefined){
+	            			if(data.error!=undefined){
+	            				createErrorMessage(data.error);
+	            			}
+	            			if(data.warning!=undefined){
+	            				createWarningMessage(data.warning);
+	            			}
+		            		
+		            	}else{
+		            		response(data.arrayResults);	
+		            	}
 	                }
 	            },
 	            error: function(data) {
@@ -68,9 +80,64 @@ function init(){
 	    close: function() {},
 	    focus: function(event,ui) {},
 	    select: function(event, ui) {
-	    	var id = this.id;
+	    	var reqId = ui.item.value;
+	    	createSaleAfterClientSelect(reqId);
+	    	this.value = ui.item.label;
 	    }
 	});
+}
+
+function createSaleAfterClientSelect(clientId){
+	jQuery.ajax({
+        dataType: "json",
+        type : 'Get',
+        url: context+"/saleCatalog/processClientAndSale.html",
+        data:{clientId: clientId},
+        success: function(data) {
+        	if(data.error!=undefined||data.warning!=undefined){
+    			if(data.error!=undefined){
+    				createErrorMessage(data.error);
+    			}
+    			if(data.warning!=undefined){
+    				createWarningMessage(data.warning);
+    			}        		
+        	}else{
+        		createSuccessMessage(data.sucess);
+        	}
+        },
+        error: function(data) {
+        	createErrorMessage('There was an unexpected error in the process please contact the administrador to review the problem.');
+        }
+    });
+}
+
+function createWarningMessage(message){
+	var html = "";
+	html +=	'<div class="alert alert-warning alert-dismissible" role="alert">';
+	html +=	'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	html +=	'<strong>Warning!</strong> '+message;
+	html +=	'</div>';
+	jQuery("#alert-messages").append(html);
+
+}
+
+function createErrorMessage(message){
+	var html = "";
+	html +=	'<div class="alert alert-danger alert-dismissible" role="alert">';
+	html +=	'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	html +=	'<strong>Error!</strong> '+message;
+	html +=	'</div>';
+	jQuery("#alert-messages").append(html);
+
+}
+
+function createSuccessMessage(message){
+	var html = "";
+	html +=	'<div class="alert alert-success alert-dismissible" role="alert">';
+	html +=	'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	html +=	'<strong>Sucess!</strong> '+message;
+	html +=	'</div>';
+	jQuery("#alert-messages").append(html);
 
 }
 </script>

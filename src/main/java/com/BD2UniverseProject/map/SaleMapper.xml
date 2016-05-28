@@ -242,4 +242,11 @@
 	inner join client cl on sl.CLIENT_ID = cl.CLIENT_ID
 	
 	</select>
+	<select id="SP_CREATE_SALE" statementType = "CALLABLE" parameterType="java.util.Map">
+	{CALL CREATE_SALE(
+			        #{clientId, mode=IN, jdbcType=NUMERIC, javaType=java.math.BigDecimal},
+					#{status, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+					#{v_sale_id, mode=OUT, jdbcType=NUMERIC, javaType=java.math.BigDecimal}
+	)}
+	</select>
 </mapper>
