@@ -196,9 +196,7 @@ public class SaleCreationCatalogController {
 				salesDetailMapper.SP_ADD_DETAIL(map);
 				
 				JSNreturn.put("sucess", "Product sucesfully added to the sale!");
-				
-				SaleDetailExample example = new SaleDetailExample();
-				example.createCriteria().andSALE_IDEqualTo(orderID);
+
 				map.put("saleId", orderID);
 				List<Map<String, Object>> listDetails =  salesDetailMapper.selectDetailTableForSale(map);
 				
@@ -253,4 +251,54 @@ public class SaleCreationCatalogController {
 		return JSNarrayDetail;
 	}
 	
+	@RequestMapping("/saleCatalog/removeDetailFromSale")
+	public void removeDetailFromSale(HttpServletRequest request,HttpServletResponse response){
+		JSONObject JSNreturn = new JSONObject();
+		JSONArray JSNarrayDetails = new JSONArray();
+		try{
+			if(request.getParameter("orderId")!=null&&!request.getParameter("orderId").equals("")
+				&&request.getParameter("saleDetailId")!=null&&!request.getParameter("saleDetailId").equals("")){
+				BigDecimal saleDetailId = new BigDecimal(request.getParameter("saleDetailId"));
+				BigDecimal orderID = new BigDecimal(request.getParameter("orderId"));
+				
+				salesDetailMapper.deleteByPrimaryKey(saleDetailId);
+				
+				JSNreturn.put("sucess", "Product sucesfully removed from the sale!");
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("saleId", orderID);
+				List<Map<String, Object>> listDetails =  salesDetailMapper.selectDetailTableForSale(map);
+				
+				if(listDetails!=null&&!listDetails.isEmpty()){
+					JSONArray detailsJson = buildDetailsJson(listDetails);
+					JSNreturn.put("detailsArray", detailsJson);
+					Sale sale = salesMapper.selectByPrimaryKey(orderID);
+					JSNreturn.put("totalPriceSale", sale.getTOTAL_PRICE());
+				}
+			}else{
+				String errors = "";
+				if(request.getParameter("orderId")==null||request.getParameter("orderId").equals("")){
+					errors+="<li>The actual order ca not be obtained or validated, plesae try again, or go to order details and edit the order</li>";
+				}
+				if(request.getParameter("saleDetailId")==null||request.getParameter("saleDetailId").equals("")){
+					errors+="<li>The selected detail can not be obtained please try again</li>";
+				}
+				JSNreturn.put("error", errors);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			JSNreturn.put("error", "cause: "+e.getCause() +",detail message:"+e.getMessage()+". Report this to the administrator");
+		}
+		
+		JSNreturn.put("arrayResults", JSNarrayDetails);
+		
+		try {
+//			JSNreturn.write(response.getWriter());
+			response.getWriter().write(JSNreturn.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

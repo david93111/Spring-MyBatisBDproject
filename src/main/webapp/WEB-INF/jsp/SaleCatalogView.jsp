@@ -196,7 +196,7 @@ function renderProductsInCatalog(productsArray,detailsArray,totalPriceSale){
 		htmlProducts+='		</div>';
 		htmlProducts+=' <div style="text-align:center;">';
 		htmlProducts+='		<img class="img-responsive" src="http://previews.123rf.com/images/cowpland/cowpland1301/cowpland130100031/17307468-SSD-solid-state-drive-vector-eps-8-Stock-Vector-ssd.jpg"></img>';
-		htmlProducts+='		<input style="margin-bottom: 10px;margin-top: 10px; text-align: center;" type="text" id="quantity_'+productsArray[i].prodId+'" placeholder="quantity"><br>';
+		htmlProducts+='		<input style="margin-bottom: 10px;margin-top: 10px; text-align: center;" type="text" value="1" id="quantity_'+productsArray[i].prodId+'" placeholder="quantity"><br>';
 		htmlProducts+='		<a class="cd-select" onclick="AddProductToSale(';
 		htmlProducts+="'"+productsArray[i].code+"'";
 		htmlProducts+=		','+productsArray[i].prodId+')">add it</a>';
@@ -299,7 +299,7 @@ function renderPricesDetailTable(detailsArray,totalPriceSale){
 	if(detailsArray!=undefined){
 
 			for(i=0;i<detailsArray.length;i++){
-				htmlDetails+='	<li id=price_details_'+detailsArray.detailId[i]+'><em>'+detailsArray.name[i]+'</em> / #'+detailsArray[i].quantity+'/ $'+(detailsArray[i].price*detailsArray[i].quantity)+'<button type="button" onclick="removeDetailFromSale('+detailsArray.detailId[i]+')" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>';
+				htmlDetails+='	<li id=price_details_'+detailsArray[i].detailId+'><em>Product:'+detailsArray[i].name+'</em> /Quantity '+detailsArray[i].quantity+'/ $'+(detailsArray[i].price*detailsArray[i].quantity)+'<button type="button" onclick="removeDetailFromSale('+detailsArray[i].detailId+')" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>';
 				quantities+=detailsArray[i].quantity;
 			}			
 	}
@@ -318,7 +318,30 @@ function renderPricesDetailTable(detailsArray,totalPriceSale){
 }
 
 function removeDetailFromSale(detailId){
-	
+	var orderIdS = jQuery("#orderId").val()!=undefined&&jQuery("#orderId").val()!="null"?jQuery("#orderId").val():null;
+	jQuery.ajax({
+        dataType: "json",
+        type : 'Get',
+        url: context+"/saleCatalog/removeDetailFromSale.html",
+        data:{orderId: orderIdS,saleDetailId: detailId},
+        success: function(data) {
+        	if(data.error!=undefined||data.warning!=undefined){
+    			if(data.error!=undefined){
+    				createErrorMessage(data.error);
+    			}
+    			if(data.warning!=undefined){
+    				createWarningMessage(data.warning);
+    			}        		
+        	}else{
+        		createSuccessMessage(data.sucess);
+        		jQuery("#price_details_"+detailId).remove();
+        		renderPricesDetailTable(data.detailsArray,data.totalPriceSale);
+        	}
+        },
+        error: function(data) {
+        	createErrorMessage('There was an unexpected error in the process please contact the administrador to review the problem.');
+        }
+    });
 }
 </script>
 
