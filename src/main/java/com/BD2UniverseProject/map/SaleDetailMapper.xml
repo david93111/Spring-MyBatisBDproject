@@ -180,7 +180,7 @@
 			</if>
 			<if test="record.QUANTITY != null">
 				QUANTITY = #{record.QUANTITY,jdbcType=DECIMAL},
-			</if>
+			</if> 
 			<if test="record.SALE_ID != null">
 				SALE_ID = #{record.SALE_ID,jdbcType=DECIMAL},
 			</if>
